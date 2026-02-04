@@ -49,18 +49,17 @@ class TeleCordBot(discord.Client):
         logger.info("TeleCordBot logged on as %s", self.user)
 
     async def on_message(self, message: discord.Message):
-        channel_forward = self.channel_forward
-        if not channel_forward:
+        if not self.channel_forward:
             return
 
-        if message.channel.id not in channel_forward:
+        if message.channel.id not in self.channel_forward:
             return
 
-        telegram_target = channel_forward[message.channel.id]["telegram_channel_id"]
+        telegram_target = self.channel_forward[message.channel.id]["telegram_channel_id"]
         author = message.author.display_name
         content = message.content
 
-        if channel_forward[message.channel.id].get("show_channel_name"):
+        if self.channel_forward[message.channel.id].get("show_channel_name"):
             author = f"#{message.channel.name} {author}"
 
         # Add Discord message URL as clickable link on author name
